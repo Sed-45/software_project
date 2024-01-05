@@ -1,5 +1,7 @@
 <?php
 
+// session with id
+
 include '..\php\dbh.inc.php';
 
 session_start();
@@ -9,6 +11,8 @@ $admin_id = $_SESSION['admin_id'];
 if(!isset($admin_id)){
    header('location:admin_login.php');
 }
+
+// deletion
 
 if(isset($_GET['delete'])){
    $delete_id = $_GET['delete'];
@@ -36,8 +40,8 @@ if(isset($_GET['delete'])){
 
 </head>
 <body>
-
-<?php include 'admin_header.php' ?>
+<!-- connects header -->
+<?php include 'admin_header.php' ?> 
 
 <!-- admins accounts section starts  -->
 
@@ -46,7 +50,7 @@ if(isset($_GET['delete'])){
    <h1 class="heading">admins account</h1>
 
    <div class="box-container">
-
+<!-- register admin box -->
    <div class="box">
       <p>register new admin</p>
       <a href="register_admin.php" class="option-btn">register</a>
