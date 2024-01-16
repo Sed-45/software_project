@@ -63,11 +63,15 @@ if (isset($_GET['std_id'])) {
             $InternshipEndDate = mysqli_real_escape_string($conn, $_POST['InternshipEndDate']);
             $internshipType = mysqli_real_escape_string($conn, $_POST['internshipType']);
             $Country = mysqli_real_escape_string($conn, $_POST['Country']);
+            
             $CIFile = mysqli_real_escape_string($conn, $_POST['CIFile']);
+            // $fileContent = file_get_contents($CIFile);
 
     
             // Update company info in the database
-            $updateCompanyQuery = "UPDATE company SET CompanyName='$CompanyName', InternshipStartDate='$InternshipStartDate', InternshipEndDate='$InternshipEndDate', internshipType='$internshipType', Country='$Country', CIFile='$CIFile' " ;
+            // $updateCompanyQuery = "UPDATE company SET CompanyName='$CompanyName', InternshipStartDate='$InternshipStartDate', InternshipEndDate='$InternshipEndDate', internshipType='$internshipType', Country='$Country', CIFile='$CIFile', file_content='$fileContent' WHERE std_id=$std_id" ;
+            $updateCompanyQuery = "UPDATE company SET CompanyName='$CompanyName', InternshipStartDate='$InternshipStartDate', InternshipEndDate='$InternshipEndDate', internshipType='$internshipType', Country='$Country', CIFile='$CIFile' WHERE std_id=$std_id" ;
+
     
             if (mysqli_query($conn, $updateCompanyQuery)) {
                 // Query executed successfully
@@ -193,9 +197,13 @@ if (isset($_POST['confirm3'])) {
                     echo "<div class='normal-text'>Internship End Date: {$company['InternshipEndDate']}</div>";
                     echo "<div class='normal-text'>Internship Type: {$company['internshipType']}</div>";
                     echo "<div class='normal-text'>Country: {$company['Country']}</div>";
-                    echo "<div class='normal-text'>File: <a href='{$company['CIFile']}' target='_blank'>View File</a></div>";
+
+                    // Create a link to open the PDF file in a new window
+                    echo "<div class='normal-text'>File: <a href='data:application/pdf;base64," . base64_encode($company['CIFile']) . "' target='_blank'>View File</a></div>";
 
                     echo "<button class='edit-btn' onclick='openPopup()'>Edit</button>";
+                    echo "</div>";
+                    echo "</div>";
 
                     echo "</div>";
                     echo "</div>";
@@ -269,7 +277,7 @@ if (isset($_POST['confirm3'])) {
 <div class="popup-overlay" id="popupOverlay">
     <div class="popup-content">
 
-    <form method="post" action="">
+    <form method="post" action="" enctype="multipart/form-data">
     <label for="CompanyName">Company Name:</label>
     <input type="text" name="CompanyName" value="<?php echo $company['CompanyName']; ?>" required><br>
 
@@ -286,7 +294,7 @@ if (isset($_POST['confirm3'])) {
     <input type="text" name="Country" value="<?php echo $company['Country']; ?>" required><br>
 
     <label for="CIFile">CIF:</label>
-    <input type="file" name="CIFile" accept="image/png, image/jpeg, .doc, .docx, .pdf"><br>
+    <input type="file" name="CIFile" accept=".pdf"><br>
 
     <input type="submit" value="confirm" name="confirm1">
 </form>
